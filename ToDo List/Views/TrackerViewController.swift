@@ -2,6 +2,9 @@ import UIKit
 
 class ToDoViewController: UIViewController {
     
+    private let networkCLient = NetworkClient.shared
+    private var tasks = [TodoItem]()
+    
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -95,6 +98,7 @@ class ToDoViewController: UIViewController {
         view.backgroundColor = .black
         addSubviews()
         makeConstraints()
+        fetchTasks()
     }
     
     private func addSubviews() {
@@ -144,6 +148,20 @@ class ToDoViewController: UIViewController {
         ])
     }
     
+    private func fetchTasks() {
+        networkCLient.fetchTasks { [weak self] result in
+            switch result {
+            case .success(let response):
+                DispatchQueue.main.async {
+                    self?.tasks = response.todos
+                    self?.tableView.reloadData()
+                }
+            case .failure(let error):
+                print("Error fetching tasks: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     @objc private func createButtonTapped(){}
     @objc private func microphoneButtonTapped(){}
     
@@ -163,12 +181,14 @@ extension ToDoViewController: UITableViewDelegate {}
 
 extension ToDoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: TrackerTableViewCell.reuseIdentifier, for: indexPath) as? TrackerTableViewCell
         guard let cell = cell else { return UITableViewCell() }
+        let task = tasks[indexPath.row]
+        cell.configure(with: task)
         return cell
     }
 }

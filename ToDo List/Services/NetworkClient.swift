@@ -12,9 +12,9 @@ final class NetworkClient {
             completion(.failure(ToDoServiceError.invalidUrlRequest))
             return
         }
-        var request = URLRequest(url: url)
+        let request = URLRequest(url: url)
         let task = session.objectTask(for: request)  { [weak self] (result: Result<TodoListResponse, Error>) in
-            guard let self = self else { return }
+            guard let _ = self else { return }
             switch result {
             case .success(let toDoList):
                 completion(.success(toDoList))

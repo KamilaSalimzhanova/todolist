@@ -87,5 +87,29 @@ final class TrackerTableViewCell: UITableViewCell {
     
     @objc private func circleButtonTapped() {}
     
+    func configure(with task: TodoItem) {
+        titleLabel.text = task.todo
+        descriptionLabel.text = task.todo
+        
+        if task.completed {
+            checkmarkImageView.isHidden = false
+            circleButton.layer.borderColor = UIColor.yellow.cgColor
+            titleLabel.attributedText = NSAttributedString(
+                    string: task.todo,
+                    attributes: [
+                        .strikethroughStyle: NSUnderlineStyle.single.rawValue,
+                        .strikethroughColor: UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
+                    ]
+                )
+            titleLabel.textColor = UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
+            descriptionLabel.textColor =  UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
+        } else {
+            checkmarkImageView.isHidden = true
+            circleButton.layer.borderColor = UIColor.white.cgColor
+            titleLabel.attributedText = NSAttributedString(string: task.todo)
+            titleLabel.textColor = .white
+            descriptionLabel.textColor = .white
+        }
+    }
 }
 
