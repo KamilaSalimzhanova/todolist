@@ -21,6 +21,7 @@
 		8EFFF5552CEFDCAA001527D0 /* URLSession+data.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF5542CEFDCAA001527D0 /* URLSession+data.swift */; };
 		8EFFF5572CEFDDCD001527D0 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF5562CEFDDCD001527D0 /* NetworkClient.swift */; };
 		8EFFF55A2CEFDEB9001527D0 /* ToDo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF5592CEFDEB9001527D0 /* ToDo.swift */; };
+		8EFFF5602CEFF263001527D0 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF55F2CEFF263001527D0 /* Date+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		8EFFF5542CEFDCAA001527D0 /* URLSession+data.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+data.swift"; sourceTree = "<group>"; };
 		8EFFF5562CEFDDCD001527D0 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		8EFFF5592CEFDEB9001527D0 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
+		8EFFF55F2CEFF263001527D0 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,6 +129,7 @@
 			children = (
 				8EFFF5542CEFDCAA001527D0 /* URLSession+data.swift */,
 				8EFFF5492CEFC534001527D0 /* UIColor+Extensions.swift */,
+				8EFFF55F2CEFF263001527D0 /* Date+Extension.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 				8EFFF5452CEFBD1A001527D0 /* DataStore.swift in Sources */,
 				8EFFF52C2CEFADBE001527D0 /* ViewController.swift in Sources */,
 				8EFFF5282CEFADBE001527D0 /* AppDelegate.swift in Sources */,
+				8EFFF5602CEFF263001527D0 /* Date+Extension.swift in Sources */,
 				8EFFF54A2CEFC534001527D0 /* UIColor+Extensions.swift in Sources */,
 				8EFFF55A2CEFDEB9001527D0 /* ToDo.swift in Sources */,
 				8EFFF5552CEFDCAA001527D0 /* URLSession+data.swift in Sources */,
