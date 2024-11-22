@@ -72,7 +72,7 @@ class ToDoViewController: UIViewController {
     private lazy var taskCountLabel: UILabel = {
         let taskCountLabel = UILabel()
         taskCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        taskCountLabel.text = "1 Задача"
+        taskCountLabel.text = String.localizedStringWithFormat(NSLocalizedString("tasksCount", comment: ""), 0 )
         taskCountLabel.textColor = .white
         taskCountLabel.font = UIFont.systemFont(ofSize: 11, weight: .regular)
         return taskCountLabel
@@ -107,6 +107,7 @@ class ToDoViewController: UIViewController {
         makeConstraints()
         fetchTasks()
         speechManager.delegate = self
+        updateTable()
     }
     
     private func addSubviews() {
@@ -237,6 +238,7 @@ extension ToDoViewController: ToDoTableViewCellProtocol{
         tableView.reloadData()
     }
     func updateTable() {
+        self.taskCountLabel.text = String.localizedStringWithFormat(NSLocalizedString("tasksCount", comment: ""), toDoStore.getCount())
         self.tableView.reloadData()
     }
 }

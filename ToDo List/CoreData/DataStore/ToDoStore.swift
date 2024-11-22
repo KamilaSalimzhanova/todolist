@@ -129,6 +129,11 @@ final class ToDoStore: NSObject {
         }
     }
     
+    func getCount() -> Int {
+        try? fetchResultController.performFetch()
+        return fetchResultController.fetchedObjects?.count ?? 0
+    }
+    
     private func printList() {
         let fetchRequest: NSFetchRequest<ToDoCoreData> = ToDoCoreData.fetchRequest()
         
@@ -186,6 +191,5 @@ final class ToDoStore: NSObject {
         return toDo
     }
 }
-
 
 extension ToDoStore: NSFetchedResultsControllerDelegate {}
