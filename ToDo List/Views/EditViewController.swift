@@ -2,6 +2,7 @@ import UIKit
 
 protocol EditViewControllerProtocol: AnyObject {
     func editTracker(todo: ToDo)
+    func createTracker(todo: ToDo)
 }
 
 final class EditViewController: UIViewController {
@@ -126,6 +127,17 @@ final class EditViewController: UIViewController {
             }
             dismiss(animated: true, completion: nil)
         } else {
+            guard let title = nameTextField.text, let description = descriptionLabel.text else { return }
+            if !title.isEmpty && description != "Введите описание" && !description.isEmpty {
+                let createdTask = ToDo(createdAt: Date(),
+                                       description: description,
+                                       id: UUID(),
+                                       isCompleted: false,
+                                       title: title)
+                
+                delegate?.createTracker(todo: createdTask)
+            }
+
             dismiss(animated: true, completion: nil)
         }
     }

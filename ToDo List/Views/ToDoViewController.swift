@@ -186,7 +186,12 @@ class ToDoViewController: UIViewController {
         updateTable()
     }
     
-    @objc private func createButtonTapped(){}    
+    @objc private func createButtonTapped(){
+        let navigationController = UINavigationController(rootViewController: editViewController)
+        navigationController.modalPresentationStyle = .overFullScreen
+        present(navigationController, animated: true, completion: nil)
+        
+    }
 }
 
 extension ToDoViewController: UISearchBarDelegate {
@@ -272,6 +277,11 @@ extension ToDoViewController: ToDoTableViewCellProtocol{
 extension ToDoViewController: EditViewControllerProtocol {
     func editTracker(todo: ToDo) {
         toDoStore.editToDo(with: todo)
+        updateTable()
+    }
+    
+    func createTracker(todo: ToDo) {
+        toDoStore.addNewTracker(todo)
         updateTable()
     }
 }
