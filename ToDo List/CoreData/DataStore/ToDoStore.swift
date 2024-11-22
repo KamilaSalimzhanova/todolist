@@ -63,6 +63,25 @@ final class ToDoStore: NSObject {
         return toDoCoreData
     }
     
+    func editToDo(with toDo: ToDo) {
+        let fetchRequest: NSFetchRequest<ToDoCoreData> = ToDoCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", toDo.id as CVarArg)
+        
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let toDoCoreData = results.first {
+                updateExistingToDo(toDoCoreData, with: toDo)
+                try context.save()
+                print("Successfully updated ToDo with ID: \(toDo.id)")
+            } else {
+                print("No ToDo found with ID: \(toDo.id)")
+            }
+        } catch let error as NSError {
+            print("Failed to edit ToDo. \(error), \(error.userInfo)")
+        }
+    }
+
+    
     func deleteTracker(toDoId: UUID) {
         let fetchRequest: NSFetchRequest<ToDoCoreData> = ToDoCoreData.fetchRequest()
         do {

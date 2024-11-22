@@ -3,6 +3,9 @@ import UIKit
 protocol ToDoTableViewCellProtocol: AnyObject {
     func updateTracker(id: UUID, toDo: ToDo)
     func updateTable()
+    func handleEditAction(indexPath: IndexPath)
+    func handleShareAction(indexPath: IndexPath)
+    func handleDeleteAction(indexPath: IndexPath)
 }
 
 final class ToDoTableViewCell: UITableViewCell {
@@ -27,6 +30,8 @@ final class ToDoTableViewCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .black
         selectionStyle = .none
+        let contextMenu = UIContextMenuInteraction(delegate: self)
+        self.addInteraction(contextMenu)
         addSubviews()
         makeConstraints()
     }
@@ -140,3 +145,30 @@ final class ToDoTableViewCell: UITableViewCell {
     }
 }
 
+extension ToDoTableViewCell: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        guard let indexPath = self.indexPath else {
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+                return UIMenu(title: "", children: [])
+            }
+        }
+        
+        let edit = UIAction(title: "Редактировать", image: UIImage(named: "Edit")) { [weak self] _ in
+            self?.delegate?.handleEditAction(indexPath: indexPath)
+        }
+        
+        let share = UIAction(title: "Поделиться", image: UIImage(named: "Share")) { [weak self] _ in
+            self?.delegate?.handleShareAction(indexPath: indexPath)
+        }
+        
+        
+        let delete = UIAction(title: "Удалить", image: UIImage(named: "Delete"), attributes: .destructive) { [weak self] _ in
+            self?.delegate?.handleDeleteAction(indexPath: indexPath)
+        }
+        
+        let actions: [UIAction] = [edit, share, delete]
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            return UIMenu(title: "", children: actions)
+        }
+    }
+}

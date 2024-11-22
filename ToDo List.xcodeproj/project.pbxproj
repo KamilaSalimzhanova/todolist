@@ -25,6 +25,7 @@
 		8EFFF5652CF0CA86001527D0 /* ToDoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF5642CF0CA86001527D0 /* ToDoStore.swift */; };
 		8EFFF5682CF0CD07001527D0 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 8EFFF5672CF0CD07001527D0 /* ProgressHUD */; };
 		8EFFF56A2CF1266E001527D0 /* SpeechRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF5692CF1266E001527D0 /* SpeechRecognition.swift */; };
+		8EFFF56C2CF133B8001527D0 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF56B2CF133B8001527D0 /* EditViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		8EFFF55F2CEFF263001527D0 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		8EFFF5642CF0CA86001527D0 /* ToDoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoStore.swift; sourceTree = "<group>"; };
 		8EFFF5692CF1266E001527D0 /* SpeechRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognition.swift; sourceTree = "<group>"; };
+		8EFFF56B2CF133B8001527D0 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +165,7 @@
 			children = (
 				8EFFF53E2CEFBBC1001527D0 /* ToDoViewController.swift */,
 				8EFFF54B2CEFD3D0001527D0 /* ToDoTableViewCell.swift */,
+				8EFFF56B2CF133B8001527D0 /* EditViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -264,6 +267,7 @@
 				8EFFF5552CEFDCAA001527D0 /* URLSession+data.swift in Sources */,
 				8EFFF52A2CEFADBE001527D0 /* SceneDelegate.swift in Sources */,
 				8EFFF5322CEFADBE001527D0 /* LibraryCoreData.xcdatamodeld in Sources */,
+				8EFFF56C2CF133B8001527D0 /* EditViewController.swift in Sources */,
 				8EFFF54C2CEFD3D0001527D0 /* ToDoTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
