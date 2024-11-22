@@ -4,7 +4,7 @@ import Speech
 
 class ToDoViewController: UIViewController {
     
-    // MARK: - View
+    // MARK: - Private Properties
     private let networkCLient = NetworkClient.shared
     private let speechManager = SpeechRecognition()
     private let editViewController = EditViewController()
@@ -100,7 +100,7 @@ class ToDoViewController: UIViewController {
         return remainedArea
     }()
     
-    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         view.backgroundColor = .black
         //toDoStore.deleteAllTrackersIteratively()
@@ -112,6 +112,7 @@ class ToDoViewController: UIViewController {
         updateTable()
     }
     
+    // MARK: - Private methods
     private func addSubviews() {
         view.addSubview(titleLabel)
         view.addSubview(searchBar)
@@ -194,6 +195,7 @@ class ToDoViewController: UIViewController {
     }
 }
 
+// MARK: - Extension UI Search Bar Delegate
 extension ToDoViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == "" {
@@ -207,6 +209,7 @@ extension ToDoViewController: UISearchBarDelegate {
     }
 }
 
+// MARK: - Extension SpeechRecognitionDelegate
 extension ToDoViewController: SpeechRecognitionDelegate {
     func didRecognizeSpeech(text: String) {
         searchBar.text = text
@@ -220,6 +223,7 @@ extension ToDoViewController: SpeechRecognitionDelegate {
     }
 }
 
+// MARK: - Extension UITableViewDelegate & UITableViewDataSource
 extension ToDoViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         handleEditAction(indexPath: indexPath)
@@ -241,6 +245,7 @@ extension ToDoViewController: UITableViewDataSource {
     }
 }
 
+// MARK: - Extension ToDoTableViewCellProtocol
 extension ToDoViewController: ToDoTableViewCellProtocol{
     func updateTracker(id: UUID, toDo: ToDo) {
         toDoStore.updateTracker(toDoId: id, with: toDo)
@@ -274,6 +279,7 @@ extension ToDoViewController: ToDoTableViewCellProtocol{
     }
 }
 
+// MARK: - Extension EditViewControllerProtocol
 extension ToDoViewController: EditViewControllerProtocol {
     func editTracker(todo: ToDo) {
         toDoStore.editToDo(with: todo)

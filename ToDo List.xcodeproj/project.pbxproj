@@ -86,7 +86,6 @@
 				8EFFF5482CEFC524001527D0 /* Helpers */,
 				8EFFF5582CEFDE95001527D0 /* Models */,
 				8EFFF55D2CEFE415001527D0 /* Views */,
-				8EFFF55E2CEFE437001527D0 /* Presenter */,
 				8EFFF5532CEFDC9C001527D0 /* Services */,
 				8EFFF5472CEFC408001527D0 /* Resources */,
 				8EFFF5272CEFADBE001527D0 /* AppDelegate.swift */,
@@ -168,13 +167,6 @@
 				8EFFF56B2CF133B8001527D0 /* EditViewController.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		8EFFF55E2CEFE437001527D0 /* Presenter */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Presenter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

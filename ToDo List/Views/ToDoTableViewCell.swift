@@ -11,14 +11,10 @@ protocol ToDoTableViewCellProtocol: AnyObject {
 final class ToDoTableViewCell: UITableViewCell {
     static let reuseIdentifier = "trackerTableViewCell"
     
+    // MARK: - Delegate
     weak var delegate: ToDoTableViewCellProtocol?
     
-    private let circleButton = UIButton(type: .system)
-    private let checkmarkImageView = UIImageView()
-    private let titleLabel = UILabel()
-    private let descriptionLabel = UILabel()
-    private let dateLabel = UILabel()
-    
+    // MARK: - Public Properties
     var id: UUID?
     var indexPath: IndexPath?
     var isCompleted: Bool?
@@ -26,6 +22,14 @@ final class ToDoTableViewCell: UITableViewCell {
     var descriptionString: String?
     var createdAt: Date?
     
+    // MARK: - Private Properties
+    private let circleButton = UIButton(type: .system)
+    private let checkmarkImageView = UIImageView()
+    private let titleLabel = UILabel()
+    private let descriptionLabel = UILabel()
+    private let dateLabel = UILabel()
+    
+    // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         backgroundColor = .black
@@ -41,6 +45,7 @@ final class ToDoTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Public Methods
     func configure(with task: ToDo, indexPath: IndexPath) {
         titleLabel.text = task.title
         descriptionLabel.text = task.description
@@ -74,6 +79,7 @@ final class ToDoTableViewCell: UITableViewCell {
         }
     }
     
+    // MARK: - Private Methods
     private func addSubviews() {
         backgroundColor = .black
         circleButton.backgroundColor = .clear
@@ -136,6 +142,7 @@ final class ToDoTableViewCell: UITableViewCell {
         ])
     }
     
+    // MARK: - Actions
     @objc private func circleButtonTapped() {
         checkmarkImageView.isHidden.toggle()
         isCompleted?.toggle()
@@ -145,6 +152,7 @@ final class ToDoTableViewCell: UITableViewCell {
     }
 }
 
+// MARK: - Extension to UIContextMenuInteractionDelegate
 extension ToDoTableViewCell: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         guard let indexPath = self.indexPath else {

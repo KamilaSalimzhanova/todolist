@@ -7,14 +7,17 @@ protocol EditViewControllerProtocol: AnyObject {
 
 final class EditViewController: UIViewController {
     
+    // MARK: - Delegate
     weak var delegate: EditViewControllerProtocol?
     
+    // MARK: - Public Properties
     var task: ToDo? {
         didSet {
             updateView()
         }
     }
     
+    // MARK: - Private Properties
     private lazy var nameTextField: UITextField = {
         let nameTextField = UITextField()
         nameTextField.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +58,7 @@ final class EditViewController: UIViewController {
         return descriptionLabel
     }()
     
-    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         view.backgroundColor = .black
         addNavigationController()
@@ -64,7 +67,7 @@ final class EditViewController: UIViewController {
         updateView()
     }
     
-    
+    // MARK: - Private Methods
     private func addNavigationController(){
         navigationItem.title = ""
         let leftButton = UIButton(type: .custom)
@@ -109,6 +112,7 @@ final class EditViewController: UIViewController {
         descriptionLabel.text = task.description
     }
     
+    // MARK: - Public Actions
     @objc private func backButtonTapped() {
         if let updatedTitle = nameTextField.text,
            let updatedDescription = descriptionLabel.text,
@@ -145,7 +149,7 @@ final class EditViewController: UIViewController {
     @objc private func inputText(_ textField: UITextField) {}
 }
 
-
+// MARK: - Extension UITextFieldDelegate 
 extension EditViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.placeholder = nil

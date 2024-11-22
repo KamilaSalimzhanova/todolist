@@ -2,20 +2,12 @@ import UIKit
 import CoreData
 
 final class ToDoStore: NSObject {
+    // MARK: - Delegate
+    weak var delegate: ToDoViewController?
+    
+    // MARK: - Private Properties
     private let context: NSManagedObjectContext
-    private weak var delegate: ToDoViewController?
     private var searchText: String
-    
-    convenience init(delegate: ToDoViewController, searchText: String){
-        let context = DataStore.shared.getContext()
-        self.init(context: context, delegate: delegate, searchText: searchText)
-    }
-    
-    init(context: NSManagedObjectContext, delegate: ToDoViewController, searchText: String) {
-        self.context = context
-        self.delegate = delegate
-        self.searchText = searchText
-    }
     
     private lazy var fetchResultController: NSFetchedResultsController<ToDoCoreData> = {
         let searchText = (self.searchText).lowercased()
@@ -34,6 +26,19 @@ final class ToDoStore: NSObject {
         return fetchResultedController
     }()
     
+    // MARK: - Initializers
+    convenience init(delegate: ToDoViewController, searchText: String){
+        let context = DataStore.shared.getContext()
+        self.init(context: context, delegate: delegate, searchText: searchText)
+    }
+    
+    init(context: NSManagedObjectContext, delegate: ToDoViewController, searchText: String) {
+        self.context = context
+        self.delegate = delegate
+        self.searchText = searchText
+    }
+    
+    // MARK: - Public Methods
     func fetchAllTasks() -> [ToDoCoreData] {
         let fetchRequest: NSFetchRequest<ToDoCoreData> = ToDoCoreData.fetchRequest()
         do {
@@ -81,7 +86,6 @@ final class ToDoStore: NSObject {
         }
     }
 
-    
     func deleteTracker(toDoId: UUID) {
         let fetchRequest: NSFetchRequest<ToDoCoreData> = ToDoCoreData.fetchRequest()
         do {
@@ -153,6 +157,24 @@ final class ToDoStore: NSObject {
         return fetchResultController.fetchedObjects?.count ?? 0
     }
     
+    func numberOfItemsInSection(_ section: Int) -> Int {
+        do {
+            try fetchResultController.performFetch()
+            print(fetchResultController.fetchedObjects ?? [])
+        } catch {
+            print("Error fetching tasks: \(error.localizedDescription)")
+        }
+        return fetchResultController.fetchedObjects?.count ?? 0
+    }
+    
+    
+    func object(at indexPath: IndexPath) -> ToDo {
+        let toDoCoreData = fetchResultController.object(at: indexPath)
+        let toDo = ToDo(createdAt: toDoCoreData.createdAt ?? Date(), description: toDoCoreData.descript ?? "", id: toDoCoreData.id ?? UUID(), isCompleted: toDoCoreData.isCompleted, title: toDoCoreData.title ?? "")
+        return toDo
+    }
+    
+    // MARK: - Private Methods
     private func printList() {
         let fetchRequest: NSFetchRequest<ToDoCoreData> = ToDoCoreData.fetchRequest()
         
@@ -190,24 +212,6 @@ final class ToDoStore: NSObject {
         } catch {
             print("Ошибка сохранения")
         }
-    }
-
-    
-    func numberOfItemsInSection(_ section: Int) -> Int {
-        do {
-            try fetchResultController.performFetch()
-            print(fetchResultController.fetchedObjects ?? [])
-        } catch {
-            print("Error fetching tasks: \(error.localizedDescription)")
-        }
-        return fetchResultController.fetchedObjects?.count ?? 0
-    }
-    
-    
-    func object(at indexPath: IndexPath) -> ToDo {
-        let toDoCoreData = fetchResultController.object(at: indexPath)
-        let toDo = ToDo(createdAt: toDoCoreData.createdAt ?? Date(), description: toDoCoreData.descript ?? "", id: toDoCoreData.id ?? UUID(), isCompleted: toDoCoreData.isCompleted, title: toDoCoreData.title ?? "")
-        return toDo
     }
 }
 

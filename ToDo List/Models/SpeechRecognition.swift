@@ -8,13 +8,16 @@ protocol SpeechRecognitionDelegate: AnyObject {
 }
 
 final class SpeechRecognition {
+    // MARK: - Delegate
     weak var delegate: SpeechRecognitionDelegate?
 
+    // MARK: - Private Properties
     private let speechRecognizer = SFSpeechRecognizer(locale: Locale(identifier: "en-US"))
     private var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     private var recognitionTask: SFSpeechRecognitionTask?
     private let audioEngine = AVAudioEngine()
 
+    // MARK: - Public Methods
     func startRecognition() {
         if audioEngine.isRunning {
             stopRecognition()
