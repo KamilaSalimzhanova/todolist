@@ -1,9 +1,12 @@
 import UIKit
+import ProgressHUD
 
 class ToDoViewController: UIViewController {
     
+    // MARK: - View
     private let networkCLient = NetworkClient.shared
-    private var tasks = [TodoItem]()
+    
+    private lazy var toDoStore = ToDoStore(delegate: self, searchText: "")
     
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -21,7 +24,7 @@ class ToDoViewController: UIViewController {
         tableView.backgroundColor = .black
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(TrackerTableViewCell.self, forCellReuseIdentifier: TrackerTableViewCell.reuseIdentifier)
+        tableView.register(ToDoTableViewCell.self, forCellReuseIdentifier: ToDoTableViewCell.reuseIdentifier)
         tableView.rowHeight = 106
         tableView.separatorInset.right = 20
         tableView.separatorInset.left = 20
@@ -94,8 +97,10 @@ class ToDoViewController: UIViewController {
         return remainedArea
     }()
     
+    
     override func viewDidLoad() {
         view.backgroundColor = .black
+        //toDoStore.deleteAllTrackersIteratively()
         addSubviews()
         makeConstraints()
         fetchTasks()
@@ -149,17 +154,30 @@ class ToDoViewController: UIViewController {
     }
     
     private func fetchTasks() {
-        networkCLient.fetchTasks { [weak self] result in
-            switch result {
-            case .success(let response):
+        print("isCoreDataEmpty: \(toDoStore.isCoreDataEmpty())")
+        if toDoStore.isCoreDataEmpty() {
+            ProgressHUD.show()
+            networkCLient.fetchTasks { [weak self] result in
+                guard let self = self else { return }
                 DispatchQueue.main.async {
-                    self?.tasks = response.todos
-                    self?.tableView.reloadData()
+                    ProgressHUD.dismiss()
+                    switch result {
+                    case .success(let response):
+                        print("1")
+                        response.todos.forEach {self.toDoStore.addNewTracker(ToDo(createdAt: Date(), description: $0.todo, id: UUID(uuidString: "\($0.id)") ?? UUID(), isCompleted: $0.completed, title: $0.todo))}
+                        self.updateTable()
+                    case .failure(let error):
+                        print("Error fetching tasks: \(error.localizedDescription)")
+                    }
                 }
-            case .failure(let error):
-                print("Error fetching tasks: \(error.localizedDescription)")
             }
         }
+    }
+    
+    private func updateTodos(text: String?) {
+        let searchText = (text ?? "").lowercased()
+        toDoStore.updateSearchText(for: searchText)
+        updateTable()
     }
     
     @objc private func createButtonTapped(){}
@@ -169,7 +187,10 @@ class ToDoViewController: UIViewController {
 
 extension ToDoViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        // TO DO
+        if searchBar.text == "" {
+            updateTodos(text: nil)
+        }
+        updateTodos(text: searchBar.text)
     }
     
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
@@ -181,14 +202,25 @@ extension ToDoViewController: UITableViewDelegate {}
 
 extension ToDoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        tasks.count
+        toDoStore.numberOfItemsInSection(section)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: TrackerTableViewCell.reuseIdentifier, for: indexPath) as? TrackerTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: ToDoTableViewCell.reuseIdentifier, for: indexPath) as? ToDoTableViewCell
         guard let cell = cell else { return UITableViewCell() }
-        let task = tasks[indexPath.row]
-        cell.configure(with: task)
+        let task = toDoStore.object(at: indexPath)
+        cell.configure(with: task, indexPath: indexPath)
+        cell.delegate = self
         return cell
+    }
+}
+
+extension ToDoViewController: ToDoTableViewCellProtocol{
+    func updateTracker(id: UUID, toDo: ToDo) {
+        toDoStore.updateTracker(toDoId: id, with: toDo)
+        tableView.reloadData()
+    }
+    func updateTable() {
+        self.tableView.reloadData()
     }
 }

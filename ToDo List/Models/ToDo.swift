@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 enum ToDoServiceError: Error {
     case invalidUrlRequest
@@ -9,8 +9,12 @@ enum ToDoServiceError: Error {
 struct TodoItem: Codable {
     let id: Int
     let todo: String
-    let completed: Bool
+    var completed: Bool
     let userId: Int
+    
+    var uuid: UUID {
+        UUID(uuidString: "\(id)") ?? UUID()
+    }
 }
 
 struct TodoListResponse: Codable {
@@ -19,3 +23,12 @@ struct TodoListResponse: Codable {
     let limit: Int
     let todos: [TodoItem]
 }
+
+struct ToDo {
+    let createdAt: Date
+    let description: String
+    let id: UUID
+    var isCompleted: Bool
+    let title: String
+}
+

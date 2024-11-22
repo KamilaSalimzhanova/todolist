@@ -1,13 +1,27 @@
 import UIKit
 
-final class TrackerTableViewCell: UITableViewCell {
+protocol ToDoTableViewCellProtocol: AnyObject {
+    func updateTracker(id: UUID, toDo: ToDo)
+    func updateTable()
+}
+
+final class ToDoTableViewCell: UITableViewCell {
     static let reuseIdentifier = "trackerTableViewCell"
+    
+    weak var delegate: ToDoTableViewCellProtocol?
     
     private let circleButton = UIButton(type: .system)
     private let checkmarkImageView = UIImageView()
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
     private let dateLabel = UILabel()
+    
+    var id: UUID?
+    var indexPath: IndexPath?
+    var isCompleted: Bool?
+    var title: String?
+    var descriptionString: String?
+    var createdAt: Date?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -22,6 +36,39 @@ final class TrackerTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(with task: ToDo, indexPath: IndexPath) {
+        titleLabel.text = task.title
+        descriptionLabel.text = task.description
+        dateLabel.text = task.createdAt.dateTimeString
+        self.id = task.id
+        self.indexPath = indexPath
+        self.isCompleted = task.isCompleted
+        self.title = task.title
+        self.descriptionString = task.description
+        self.createdAt = task.createdAt
+        
+        if task.isCompleted {
+            checkmarkImageView.isHidden = false
+            circleButton.layer.borderColor = UIColor.yellow.cgColor
+            titleLabel.attributedText = NSAttributedString(
+                string: task.title,
+                attributes: [
+                    .strikethroughStyle: NSUnderlineStyle.single.rawValue,
+                    .strikethroughColor: UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
+                ]
+            )
+            titleLabel.textColor = UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
+            descriptionLabel.textColor =  UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
+        } else {
+            checkmarkImageView.isHidden = true
+            circleButton.layer.borderColor = UIColor.white.cgColor
+            titleLabel.attributedText = nil
+            titleLabel.text = task.title
+            titleLabel.textColor = .white
+            descriptionLabel.textColor = .white
+        }
+    }
+    
     private func addSubviews() {
         backgroundColor = .black
         circleButton.backgroundColor = .clear
@@ -29,9 +76,9 @@ final class TrackerTableViewCell: UITableViewCell {
         circleButton.layer.borderWidth = 2.0
         circleButton.layer.cornerRadius = 12
         circleButton.layer.masksToBounds = true
-
+        
         circleButton.addTarget(self, action: #selector(circleButtonTapped), for: .touchUpInside)
-
+        
         checkmarkImageView.image = UIImage(systemName: "checkmark")
         checkmarkImageView.tintColor = .yellow
         checkmarkImageView.isHidden = false
@@ -56,7 +103,6 @@ final class TrackerTableViewCell: UITableViewCell {
             contentView.addSubview($0)
         }
     }
-    
     
     private func makeConstraints() {
         NSLayoutConstraint.activate([
@@ -85,31 +131,12 @@ final class TrackerTableViewCell: UITableViewCell {
         ])
     }
     
-    @objc private func circleButtonTapped() {}
-    
-    func configure(with task: TodoItem) {
-        titleLabel.text = task.todo
-        descriptionLabel.text = task.todo
-        
-        if task.completed {
-            checkmarkImageView.isHidden = false
-            circleButton.layer.borderColor = UIColor.yellow.cgColor
-            titleLabel.attributedText = NSAttributedString(
-                    string: task.todo,
-                    attributes: [
-                        .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                        .strikethroughColor: UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
-                    ]
-                )
-            titleLabel.textColor = UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
-            descriptionLabel.textColor =  UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
-        } else {
-            checkmarkImageView.isHidden = true
-            circleButton.layer.borderColor = UIColor.white.cgColor
-            titleLabel.attributedText = NSAttributedString(string: task.todo)
-            titleLabel.textColor = .white
-            descriptionLabel.textColor = .white
-        }
+    @objc private func circleButtonTapped() {
+        checkmarkImageView.isHidden.toggle()
+        isCompleted?.toggle()
+        guard let isCompleted = isCompleted,
+              let id = id else { return }
+        self.delegate?.updateTracker(id: id, toDo: ToDo(createdAt: createdAt ?? Date(), description: descriptionString ?? "", id: id, isCompleted: isCompleted, title: title ?? ""))
     }
 }
 

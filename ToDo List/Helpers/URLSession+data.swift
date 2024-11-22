@@ -27,7 +27,7 @@ extension URLSession {
                 print("[Data task]: Url Request Error - код ошибки \(error)")
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
             } else {
-                print("[Data task]: Url Session Error - код ошибки \(error)")
+                print("[Data task]: Url Session Error")
                 fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
             }
         })
