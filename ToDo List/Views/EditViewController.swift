@@ -109,17 +109,25 @@ final class EditViewController: UIViewController {
     }
     
     @objc private func backButtonTapped() {
-        let updatedTitle = nameTextField.text ?? ""
-        let updatedDescription = descriptionLabel.text ?? ""
-        let updatedDate = Date()
-        
-        guard let task = self.task else { return }
-        
-        let updatedTask = ToDo(createdAt: updatedDate, description: updatedDescription, id: task.id, isCompleted: task.isCompleted, title: updatedTitle)
-        
-        print("updatedTask \(updatedTask)")
-        delegate?.editTracker(todo: updatedTask)
-        dismiss(animated: true, completion: nil)
+        if let updatedTitle = nameTextField.text,
+           let updatedDescription = descriptionLabel.text,
+           let task = task
+        {
+            
+            if !updatedTitle.isEmpty && !updatedDescription.isEmpty {
+                let updatedTask = ToDo(createdAt: Date(),
+                                       description: updatedDescription,
+                                       id: task.id,
+                                       isCompleted: task.isCompleted,
+                                       title: updatedTitle)
+                
+                print("updatedTask \(updatedTask)")
+                delegate?.editTracker(todo: updatedTask)
+            }
+            dismiss(animated: true, completion: nil)
+        } else {
+            dismiss(animated: true, completion: nil)
+        }
     }
     
     @objc private func inputText(_ textField: UITextField) {}
