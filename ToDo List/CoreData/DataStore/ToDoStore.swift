@@ -70,9 +70,6 @@ final class ToDoStore: NSObject {
             if let index = toDoCoreData.firstIndex(where: {$0.id == toDoId}) {
                 context.delete(toDoCoreData[index])
                 try context.save()
-                
-                let remainingItems = try context.fetch(fetchRequest)
-                printList()
             }
         }  catch {
             print("Failed to fetch or save tracker: \(error.localizedDescription)")
@@ -114,7 +111,9 @@ final class ToDoStore: NSObject {
     func updateSearchText(for searchedText: String) {
         if searchedText != "" {
             fetchResultController.fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[c] %@", #keyPath(ToDoCoreData.title), searchedText)
-        } 
+        } else {
+            fetchResultController.fetchRequest.predicate = nil
+        }
         try? fetchResultController.performFetch()
     }
     

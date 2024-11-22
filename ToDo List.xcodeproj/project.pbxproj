@@ -24,6 +24,7 @@
 		8EFFF5602CEFF263001527D0 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF55F2CEFF263001527D0 /* Date+Extension.swift */; };
 		8EFFF5652CF0CA86001527D0 /* ToDoStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF5642CF0CA86001527D0 /* ToDoStore.swift */; };
 		8EFFF5682CF0CD07001527D0 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 8EFFF5672CF0CD07001527D0 /* ProgressHUD */; };
+		8EFFF56A2CF1266E001527D0 /* SpeechRecognition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF5692CF1266E001527D0 /* SpeechRecognition.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		8EFFF5592CEFDEB9001527D0 /* ToDo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDo.swift; sourceTree = "<group>"; };
 		8EFFF55F2CEFF263001527D0 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		8EFFF5642CF0CA86001527D0 /* ToDoStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoStore.swift; sourceTree = "<group>"; };
+		8EFFF5692CF1266E001527D0 /* SpeechRecognition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechRecognition.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				8EFFF5592CEFDEB9001527D0 /* ToDo.swift */,
+				8EFFF5692CF1266E001527D0 /* SpeechRecognition.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -251,6 +254,7 @@
 				8EFFF53F2CEFBBC1001527D0 /* ToDoViewController.swift in Sources */,
 				8EFFF5652CF0CA86001527D0 /* ToDoStore.swift in Sources */,
 				8EFFF5572CEFDDCD001527D0 /* NetworkClient.swift in Sources */,
+				8EFFF56A2CF1266E001527D0 /* SpeechRecognition.swift in Sources */,
 				8EFFF5452CEFBD1A001527D0 /* DataStore.swift in Sources */,
 				8EFFF52C2CEFADBE001527D0 /* ViewController.swift in Sources */,
 				8EFFF5282CEFADBE001527D0 /* AppDelegate.swift in Sources */,

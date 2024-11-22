@@ -1,10 +1,12 @@
 import UIKit
 import ProgressHUD
+import Speech
 
 class ToDoViewController: UIViewController {
     
     // MARK: - View
     private let networkCLient = NetworkClient.shared
+    private let speechManager = SpeechRecognition()
     
     private lazy var toDoStore = ToDoStore(delegate: self, searchText: "")
     
@@ -104,6 +106,7 @@ class ToDoViewController: UIViewController {
         addSubviews()
         makeConstraints()
         fetchTasks()
+        speechManager.delegate = self
     }
     
     private func addSubviews() {
@@ -194,7 +197,20 @@ extension ToDoViewController: UISearchBarDelegate {
     }
     
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
-        //to do
+        speechManager.startRecognition()
+    }
+}
+
+extension ToDoViewController: SpeechRecognitionDelegate {
+    func didRecognizeSpeech(text: String) {
+        searchBar.text = text
+        updateTodos(text: text)
+    }
+    
+    func didFailWithError(error: Error) {
+        let alert = UIAlertController(title: "Speech Error", message: error.localizedDescription, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alert, animated: true, completion: nil)
     }
 }
 

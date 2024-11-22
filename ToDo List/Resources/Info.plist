@@ -19,5 +19,7 @@
 			</array>
 		</dict>
 	</dict>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>We need access to recognize your speech for better functionality in our app.</string>
 </dict>
 </plist>
