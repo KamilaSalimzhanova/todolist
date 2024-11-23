@@ -9,7 +9,7 @@ final class EditViewController: UIViewController {
     
     // MARK: - Delegate
     weak var delegate: EditViewControllerProtocol?
-    
+        
     // MARK: - Public Properties
     var task: ToDo? {
         didSet {
@@ -29,7 +29,6 @@ final class EditViewController: UIViewController {
         nameTextField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: attributes)
         nameTextField.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         nameTextField.textColor = .white
-        nameTextField.text = ""
         nameTextField.backgroundColor = .none
         nameTextField.addTarget(self,
                                 action: #selector(inputText(_ :)),

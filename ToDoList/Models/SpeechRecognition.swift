@@ -39,6 +39,7 @@ final class SpeechRecognition {
     }
 
     func stopRecognition() {
+        audioEngine.inputNode.removeTap(onBus: 0)
         audioEngine.stop()
         recognitionRequest?.endAudio()
         recognitionTask?.cancel()

@@ -15,6 +15,7 @@ class ToDoViewController: UIViewController & ToDoViewControllerProtocol {
     
     // MARK: - Private Properties
     private let speechManager = SpeechRecognition()
+    private var isSpeechRecognitionActive = false
     
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -62,8 +63,8 @@ class ToDoViewController: UIViewController & ToDoViewControllerProtocol {
             searchIcon.tintColor = UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
         }
         searchBar.showsBookmarkButton = true
-        searchBar.setImage(UIImage(systemName: "mic.fill"), for: .bookmark, state: .normal)
-        searchBar.tintColor = UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
+        searchBar.setImage(UIImage(systemName: "mic.slash.fill"), for: .bookmark, state: .normal)
+        searchBar.tintColor = .gray
         searchBar.delegate = self
         return searchBar
     }()
@@ -195,9 +196,19 @@ extension ToDoViewController: UISearchBarDelegate {
         presenter?.updateSearchText(for: (searchBar.text ?? "").lowercased())
     }
     
+    
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
-        speechManager.startRecognition()
-    }
+        if isSpeechRecognitionActive {
+            speechManager.stopRecognition()
+        } else {
+            speechManager.startRecognition()
+        }
+        isSpeechRecognitionActive.toggle()
+
+        var micIcon = isSpeechRecognitionActive ? UIImage(systemName: "mic.fill") : UIImage(systemName: "mic.slash.fill")
+        micIcon = micIcon?.withTintColor(isSpeechRecognitionActive ? .red : .gray)
+        searchBar.setImage(micIcon, for: .bookmark, state: .normal)
+        }
 }
 
 // MARK: - Extension SpeechRecognitionDelegate
