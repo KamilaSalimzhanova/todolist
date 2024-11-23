@@ -28,7 +28,11 @@ final class ToDoViewPresenter: ToDoViewPresenterProtocol {
     init(view: ToDoViewControllerProtocol? = nil, toDoList: [ToDo] = [], toDoStore: ToDoStore = ToDoStore(searchText: "")) {
         self.view = view
         self.toDoStore = toDoStore
-        self.toDoList = toDoStore.fetchAllTasks()
+        if toDoList.isEmpty {
+            self.toDoList = toDoStore.fetchAllTasks()
+        } else {
+            self.toDoList = toDoList
+        }
         toDoStore.delegate = self
         editViewController.delegate = self
     }

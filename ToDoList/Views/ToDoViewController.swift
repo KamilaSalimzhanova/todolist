@@ -105,13 +105,23 @@ class ToDoViewController: UIViewController & ToDoViewControllerProtocol {
         return remainedArea
     }()
     
+    // MARK: - Initialization
+    init(presenter: ToDoViewPresenterProtocol? = nil) {
+        super.init(nibName: nil, bundle: nil)
+        self.presenter = presenter ?? ToDoViewPresenter(view: self)
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .black
-        presenter = ToDoViewPresenter(view: self)
+        presenter?.loadTrackers() // Use the injected presenter
         addSubviews()
         makeConstraints()
-        presenter?.loadTrackers()
         speechManager.delegate = self
         updateTable()
     }
@@ -169,7 +179,7 @@ class ToDoViewController: UIViewController & ToDoViewControllerProtocol {
             remainedArea.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
     }
-
+    
     @objc private func createButtonTapped(){
         guard let presenter else { return }
         present(presenter.displayController(task: nil), animated: true, completion: nil)

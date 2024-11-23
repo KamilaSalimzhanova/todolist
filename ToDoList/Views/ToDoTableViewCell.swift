@@ -60,7 +60,7 @@ final class ToDoTableViewCell: UITableViewCell {
         descriptionLabel.text = task.description
         descriptionLabel.textColor = task.isCompleted ? .gray : .white
         checkmarkImageView.isHidden = !task.isCompleted
-
+        dateLabel.textColor = .gray
         circleButton.layer.borderColor = task.isCompleted ? UIColor.yellow.cgColor : UIColor.white.cgColor
         if task.isCompleted {
             titleLabel.attributedText = NSAttributedString(

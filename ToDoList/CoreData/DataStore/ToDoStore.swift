@@ -1,7 +1,7 @@
 import UIKit
 import CoreData
 
-final class ToDoStore: NSObject {
+class ToDoStore: NSObject {
     // MARK: - Delegate
     weak var delegate: ToDoViewPresenterProtocol?
     
