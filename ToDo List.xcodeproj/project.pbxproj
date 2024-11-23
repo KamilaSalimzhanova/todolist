@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8EFA8B722CF1DD2900BC118B /* ToDoVIewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFA8B712CF1DD2900BC118B /* ToDoVIewPresenter.swift */; };
 		8EFFF5282CEFADBE001527D0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF5272CEFADBE001527D0 /* AppDelegate.swift */; };
 		8EFFF52A2CEFADBE001527D0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF5292CEFADBE001527D0 /* SceneDelegate.swift */; };
 		8EFFF52C2CEFADBE001527D0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8EFFF52B2CEFADBE001527D0 /* ViewController.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8EFA8B712CF1DD2900BC118B /* ToDoVIewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoVIewPresenter.swift; sourceTree = "<group>"; };
 		8EFFF5242CEFADBE001527D0 /* ToDo List.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ToDo List.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EFFF5272CEFADBE001527D0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8EFFF5292CEFADBE001527D0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +65,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8EFA8B702CF1DD1500BC118B /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				8EFA8B712CF1DD2900BC118B /* ToDoVIewPresenter.swift */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
 		8EFFF51B2CEFADBE001527D0 = {
 			isa = PBXGroup;
 			children = (
@@ -86,6 +96,7 @@
 				8EFFF5482CEFC524001527D0 /* Helpers */,
 				8EFFF5582CEFDE95001527D0 /* Models */,
 				8EFFF55D2CEFE415001527D0 /* Views */,
+				8EFA8B702CF1DD1500BC118B /* Presenter */,
 				8EFFF5532CEFDC9C001527D0 /* Services */,
 				8EFFF5472CEFC408001527D0 /* Resources */,
 				8EFFF5272CEFADBE001527D0 /* AppDelegate.swift */,
@@ -257,6 +268,7 @@
 				8EFFF54A2CEFC534001527D0 /* UIColor+Extensions.swift in Sources */,
 				8EFFF55A2CEFDEB9001527D0 /* ToDo.swift in Sources */,
 				8EFFF5552CEFDCAA001527D0 /* URLSession+data.swift in Sources */,
+				8EFA8B722CF1DD2900BC118B /* ToDoVIewPresenter.swift in Sources */,
 				8EFFF52A2CEFADBE001527D0 /* SceneDelegate.swift in Sources */,
 				8EFFF5322CEFADBE001527D0 /* LibraryCoreData.xcdatamodeld in Sources */,
 				8EFFF56C2CF133B8001527D0 /* EditViewController.swift in Sources */,

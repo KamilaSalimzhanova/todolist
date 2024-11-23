@@ -2,14 +2,19 @@ import UIKit
 import ProgressHUD
 import Speech
 
-class ToDoViewController: UIViewController {
+
+protocol ToDoViewControllerProtocol: AnyObject {
+    var presenter: ToDoViewPresenterProtocol? { get set }
+    func showPrograssHud(shown: Bool)
+    func updateTable()
+}
+
+class ToDoViewController: UIViewController & ToDoViewControllerProtocol {
+    
+    var presenter: ToDoViewPresenterProtocol?
     
     // MARK: - Private Properties
-    private let networkCLient = NetworkClient.shared
     private let speechManager = SpeechRecognition()
-    private let editViewController = EditViewController()
-    
-    private lazy var toDoStore = ToDoStore(delegate: self, searchText: "")
     
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -103,14 +108,19 @@ class ToDoViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         view.backgroundColor = .black
-        //toDoStore.deleteAllTrackersIteratively()
+        presenter = ToDoViewPresenter(view: self)
         addSubviews()
         makeConstraints()
-        fetchTasks()
+        presenter?.loadTrackers()
         speechManager.delegate = self
-        editViewController.delegate = self
         updateTable()
     }
+    
+    // MARK: - Public Methods
+    func showPrograssHud(shown: Bool) {
+        shown ? ProgressHUD.show() : ProgressHUD.dismiss()
+    }
+    
     
     // MARK: - Private methods
     private func addSubviews() {
@@ -159,39 +169,10 @@ class ToDoViewController: UIViewController {
             remainedArea.rightAnchor.constraint(equalTo: view.rightAnchor)
         ])
     }
-    
-    private func fetchTasks() {
-        print("isCoreDataEmpty: \(toDoStore.isCoreDataEmpty())")
-        if toDoStore.isCoreDataEmpty() {
-            ProgressHUD.show()
-            networkCLient.fetchTasks { [weak self] result in
-                guard let self = self else { return }
-                DispatchQueue.main.async {
-                    ProgressHUD.dismiss()
-                    switch result {
-                    case .success(let response):
-                        print("1")
-                        response.todos.forEach {self.toDoStore.addNewTracker(ToDo(createdAt: Date(), description: $0.todo, id: UUID(uuidString: "\($0.id)") ?? UUID(), isCompleted: $0.completed, title: $0.todo))}
-                        self.updateTable()
-                    case .failure(let error):
-                        print("Error fetching tasks: \(error.localizedDescription)")
-                    }
-                }
-            }
-        }
-    }
-    
-    private func updateTodos(text: String?) {
-        let searchText = (text ?? "").lowercased()
-        toDoStore.updateSearchText(for: searchText)
-        updateTable()
-    }
-    
+
     @objc private func createButtonTapped(){
-        let navigationController = UINavigationController(rootViewController: editViewController)
-        navigationController.modalPresentationStyle = .overFullScreen
-        present(navigationController, animated: true, completion: nil)
-        
+        guard let presenter else { return }
+        present(presenter.displayController(task: nil), animated: true, completion: nil)
     }
 }
 
@@ -199,9 +180,9 @@ class ToDoViewController: UIViewController {
 extension ToDoViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == "" {
-            updateTodos(text: nil)
+            presenter?.updateSearchText(for: "")
         }
-        updateTodos(text: searchBar.text)
+        presenter?.updateSearchText(for: (searchBar.text ?? "").lowercased())
     }
     
     func searchBarBookmarkButtonClicked(_ searchBar: UISearchBar) {
@@ -213,7 +194,7 @@ extension ToDoViewController: UISearchBarDelegate {
 extension ToDoViewController: SpeechRecognitionDelegate {
     func didRecognizeSpeech(text: String) {
         searchBar.text = text
-        updateTodos(text: text)
+        presenter?.updateSearchText(for: (searchBar.text ?? "").lowercased())
     }
     
     func didFailWithError(error: Error) {
@@ -232,13 +213,14 @@ extension ToDoViewController: UITableViewDelegate {
 
 extension ToDoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        toDoStore.numberOfItemsInSection(section)
+        presenter?.getToDoListCount() ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ToDoTableViewCell.reuseIdentifier, for: indexPath) as? ToDoTableViewCell
         guard let cell = cell else { return UITableViewCell() }
-        let task = toDoStore.object(at: indexPath)
+        let task = presenter?.getToDoListObject(at: indexPath)
+        guard let task = task else { return UITableViewCell() }
         cell.configure(with: task, indexPath: indexPath)
         cell.delegate = self
         return cell
@@ -248,46 +230,29 @@ extension ToDoViewController: UITableViewDataSource {
 // MARK: - Extension ToDoTableViewCellProtocol
 extension ToDoViewController: ToDoTableViewCellProtocol{
     func updateTracker(id: UUID, toDo: ToDo) {
-        toDoStore.updateTracker(toDoId: id, with: toDo)
-        tableView.reloadData()
+        presenter?.updateTracker(toDoId: id, with: toDo)
     }
     
     func updateTable() {
-        self.taskCountLabel.text = String.localizedStringWithFormat(NSLocalizedString("tasksCount", comment: ""), toDoStore.getCount())
+        self.taskCountLabel.text = String.localizedStringWithFormat(NSLocalizedString("tasksCount", comment: ""), presenter?.getToDoListCount() ?? 0)
         self.tableView.reloadData()
     }
     
     func handleEditAction(indexPath: IndexPath) {
-        let selectedTask = toDoStore.object(at: indexPath)
-        editViewController.task = selectedTask
-        let navigationController = UINavigationController(rootViewController: editViewController)
-        navigationController.modalPresentationStyle = .overFullScreen
-        present(navigationController, animated: true, completion: nil)
+        let selectedTask = presenter?.getToDoListObject(at: indexPath)
+        guard let presenter else { return }
+        present(presenter.displayController(task: selectedTask), animated: true, completion: nil)
     }
     
     func handleShareAction(indexPath: IndexPath) {
-        let task = toDoStore.object(at: indexPath)
+        let task = presenter?.getToDoListObject(at: indexPath)
+        guard let task else { return }
         let shareContent = "Task: \(task.title)\nDescription: \(task.description)"
         let activityController = UIActivityViewController(activityItems: [shareContent], applicationActivities: nil)
         present(activityController, animated: true, completion: nil)
     }
     
     func handleDeleteAction(indexPath: IndexPath) {
-        let task = toDoStore.object(at: indexPath)
-        toDoStore.deleteTracker(toDoId: task.id)
-        updateTable()
-    }
-}
-
-// MARK: - Extension EditViewControllerProtocol
-extension ToDoViewController: EditViewControllerProtocol {
-    func editTracker(todo: ToDo) {
-        toDoStore.editToDo(with: todo)
-        updateTable()
-    }
-    
-    func createTracker(todo: ToDo) {
-        toDoStore.addNewTracker(todo)
-        updateTable()
+        presenter?.deleteAction(at: indexPath)
     }
 }

@@ -3,11 +3,11 @@ import CoreData
 
 final class ToDoStore: NSObject {
     // MARK: - Delegate
-    weak var delegate: ToDoViewController?
+    weak var delegate: ToDoViewPresenterProtocol?
     
     // MARK: - Private Properties
     private let context: NSManagedObjectContext
-    private var searchText: String
+    private var searchText: String = ""
     
     private lazy var fetchResultController: NSFetchedResultsController<ToDoCoreData> = {
         let searchText = (self.searchText).lowercased()
@@ -27,28 +27,35 @@ final class ToDoStore: NSObject {
     }()
     
     // MARK: - Initializers
-    convenience init(delegate: ToDoViewController, searchText: String){
+    convenience init(searchText: String){
         let context = DataStore.shared.getContext()
-        self.init(context: context, delegate: delegate, searchText: searchText)
+        self.init(context: context, searchText: searchText)
     }
     
-    init(context: NSManagedObjectContext, delegate: ToDoViewController, searchText: String) {
+    init(context: NSManagedObjectContext, searchText: String) {
         self.context = context
-        self.delegate = delegate
         self.searchText = searchText
     }
     
     // MARK: - Public Methods
-    func fetchAllTasks() -> [ToDoCoreData] {
-        let fetchRequest: NSFetchRequest<ToDoCoreData> = ToDoCoreData.fetchRequest()
+    func fetchAllTasks() -> [ToDo] {
         do {
-            let results = try context.fetch(fetchRequest)
-            return results
+            try fetchResultController.performFetch()
+            return fetchResultController.fetchedObjects?.map { coreDataToDo in
+                ToDo(
+                    createdAt: coreDataToDo.createdAt ?? Date(),
+                    description: coreDataToDo.descript ?? "",
+                    id: coreDataToDo.id ?? UUID(),
+                    isCompleted: coreDataToDo.isCompleted,
+                    title: coreDataToDo.title ?? ""
+                )
+            } ?? []
         } catch {
-            print("Error fetching tasks: \(error.localizedDescription)")
+            print("Failed to fetch tasks: \(error.localizedDescription)")
             return []
         }
     }
+
     
     func fetchTrackerCoreData() -> [ToDoCoreData] {
         let fetchRequest = NSFetchRequest<ToDoCoreData>(entityName: "ToDoCoreData")
@@ -121,8 +128,6 @@ final class ToDoStore: NSObject {
             if let toDoCoreData = results.first {
                 updateExistingToDo(toDoCoreData, with: updatedToDo)
                 try context.save()
-                let remainingItems = try context.fetch(fetchRequest)
-                printList()
             } else {
                 print("No ToDo found with ID: \(toDoId)")
             }
@@ -130,8 +135,8 @@ final class ToDoStore: NSObject {
             print("Failed to update ToDo. \(error), \(error.userInfo)")
         }
     }
-
-    func updateSearchText(for searchedText: String) {
+    
+    func updateSearchText(for searchedText: String){
         if searchedText != "" {
             fetchResultController.fetchRequest.predicate = NSPredicate(format: "%K CONTAINS[c] %@", #keyPath(ToDoCoreData.title), searchedText)
         } else {
@@ -139,6 +144,7 @@ final class ToDoStore: NSObject {
         }
         try? fetchResultController.performFetch()
     }
+
     
     func isCoreDataEmpty() -> Bool {
         let fetchRequest: NSFetchRequest<ToDoCoreData> = ToDoCoreData.fetchRequest()

@@ -47,37 +47,32 @@ final class ToDoTableViewCell: UITableViewCell {
     
     // MARK: - Public Methods
     func configure(with task: ToDo, indexPath: IndexPath) {
-        titleLabel.text = task.title
-        descriptionLabel.text = task.description
-        dateLabel.text = task.createdAt.dateTimeString
         self.id = task.id
         self.indexPath = indexPath
         self.isCompleted = task.isCompleted
         self.title = task.title
         self.descriptionString = task.description
         self.createdAt = task.createdAt
-        
+
+        titleLabel.attributedText = nil
+        titleLabel.text = task.title
+        titleLabel.textColor = task.isCompleted ? .gray : .white
+        descriptionLabel.text = task.description
+        descriptionLabel.textColor = task.isCompleted ? .gray : .white
+        checkmarkImageView.isHidden = !task.isCompleted
+
+        circleButton.layer.borderColor = task.isCompleted ? UIColor.yellow.cgColor : UIColor.white.cgColor
         if task.isCompleted {
-            checkmarkImageView.isHidden = false
-            circleButton.layer.borderColor = UIColor.yellow.cgColor
             titleLabel.attributedText = NSAttributedString(
                 string: task.title,
                 attributes: [
                     .strikethroughStyle: NSUnderlineStyle.single.rawValue,
-                    .strikethroughColor: UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
+                    .strikethroughColor: UIColor.lightGray
                 ]
             )
-            titleLabel.textColor = UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
-            descriptionLabel.textColor =  UIColor.rgbColors(red: 244, green: 244, blue: 244, alpha: 1)
-        } else {
-            checkmarkImageView.isHidden = true
-            circleButton.layer.borderColor = UIColor.white.cgColor
-            titleLabel.attributedText = nil
-            titleLabel.text = task.title
-            titleLabel.textColor = .white
-            descriptionLabel.textColor = .white
         }
     }
+
     
     // MARK: - Private Methods
     private func addSubviews() {
