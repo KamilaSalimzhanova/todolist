@@ -44,7 +44,7 @@
 /* Begin PBXFileReference section */
 		8EFA8B712CF1DD2900BC118B /* ToDoVIewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoVIewPresenter.swift; sourceTree = "<group>"; };
 		8EFA8B822CF1F52200BC118B /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		8EFA8B892CF1F61800BC118B /* ToDoListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ToDoListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8EFA8B892CF1F61800BC118B /* ToDoListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = ToDoListTests.xctest; path = "/Users/kamila/Documents/ios_dev/ToDo List/build/Debug-iphoneos/ToDoListTests.xctest"; sourceTree = "<absolute>"; };
 		8EFA8B8B2CF1F61800BC118B /* ToDoListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoListTests.swift; sourceTree = "<group>"; };
 		8EFA8B932CF1F6D700BC118B /* ToDoList.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = ToDoList.xctestplan; sourceTree = "<group>"; };
 		8EFFF5242CEFADBE001527D0 /* ToDoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = ToDoList.app; path = "/Users/kamila/Documents/ios_dev/ToDo List/build/Debug-iphoneos/ToDoList.app"; sourceTree = "<absolute>"; };
@@ -120,7 +120,6 @@
 				8EFFF5262CEFADBE001527D0 /* ToDoList */,
 				8EFA8B8A2CF1F61800BC118B /* ToDoListTests */,
 				8EFA8B812CF1F52200BC118B /* Frameworks */,
-				8EFA8B892CF1F61800BC118B /* ToDoListTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};

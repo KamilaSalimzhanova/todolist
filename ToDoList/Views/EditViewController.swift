@@ -29,6 +29,7 @@ final class EditViewController: UIViewController {
         nameTextField.attributedPlaceholder = NSAttributedString(string: placeholderText, attributes: attributes)
         nameTextField.font = UIFont.systemFont(ofSize: 34, weight: .bold)
         nameTextField.textColor = .white
+        nameTextField.text = ""
         nameTextField.backgroundColor = .none
         nameTextField.addTarget(self,
                                 action: #selector(inputText(_ :)),
@@ -106,7 +107,12 @@ final class EditViewController: UIViewController {
     }
     
     private func updateView() {
-        guard isViewLoaded, let task = task else { return }
+        guard isViewLoaded, let task = task else {
+            nameTextField.text = ""
+            dateLabel.text = Date().dateTimeString
+            descriptionLabel.text = "Введите описание"
+            return
+        }
         nameTextField.text = task.title
         dateLabel.text = task.createdAt.dateTimeString
         descriptionLabel.text = task.description
