@@ -66,6 +66,10 @@ final class EditViewController: UIViewController {
         addSubviews()
         makeConstraints()
         updateView()
+        
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(backButtonTapped))
+        swipeGesture.direction = .right
+        view.addGestureRecognizer(swipeGesture)
     }
     
     // MARK: - Private Methods
