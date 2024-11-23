@@ -39,8 +39,6 @@ final class ToDoViewPresenter: ToDoViewPresenterProtocol {
     
     //MARK: - Public properties
     func loadTrackers() {
-        print("isCoreDataEmpty: \(toDoStore.isCoreDataEmpty())")
-        print("todolist: \(toDoList)")
         if toDoStore.isCoreDataEmpty() {
             view?.showPrograssHud(shown: true)
             networkClient.fetchTasks { [weak self] result in
